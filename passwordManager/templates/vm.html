@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}
+  Virtual Machine
+{% endblock %}
+
+{% block content %}
+    <div class="checkbox mb-3">
+        <h6>Add a VM password?</h6>
+        <a class="btn btn-sm btn-secondary" href="{{ url_for('vmadd_page') }}">Add</a>
+    </div>
+    <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <!-- Your Columns HERE -->
+                <th scope="col">ID</th>
+                <th scope="col">Host IP</th>
+                <th scope="col">User Name</th>
+                <th scope="col">Password</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Your rows inside the table HERE: -->
+            {% for vm in vms %}
+                <tr>
+                    <td>{{ vm.id }}</td>
+                    <td>{{ vm.hostip }}</td>
+                    <td>{{ vm.username }}</td>
+                    <td>{{ vm.password_hash }}</td>
+                    <td>
+                        <button class="btn btn-outline btn-info">Show Password</button>
+                        <button class="btn btn-outline btn-success">Delete Password</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
