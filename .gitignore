@@ -1,9 +1,3 @@
-__pycache__/passowrdManager.cpython-39.pyc
-__pycache__/run.cpython-39.pyc
-passwordManager/__pycache__/__init__.cpython-39.pyc
-passwordManager/__pycache__/routes.cpython-39.pyc
-passwordManager/__pycache__/models.cpython-39.pyc
-passwordManager/__pycache__/forms.cpython-39.pyc
-passwordManager/__pycache__/models.cpython-39.pyc
-passwordManager/__pycache__/routes.cpython-39.pyc
+__pycache__/*
+passwordManager/__pycache__/*
 
