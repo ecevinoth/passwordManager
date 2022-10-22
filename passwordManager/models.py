@@ -1,7 +1,15 @@
-from passwordManager import db
+from passwordManager import db, login_manager
 from passwordManager import bcrypt
+from passwordManager import f
+from passwordManager import app
+from flask_login import UserMixin
 
-class User(db.Model):
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer(), primary_key=True)
     username = db.Column(db.String(length=30), nullable=False, unique=True)
     email_address = db.Column(db.String(length=50), nullable=False, unique=True)
@@ -17,6 +25,9 @@ class User(db.Model):
     def password(self, plain_text_password):
         self.password_hash = bcrypt.generate_password_hash(plain_text_password).decode('utf-8')
 
+    def check_password_correction(self, attempted_password):
+        return bcrypt.check_password_hash(self.password_hash, attempted_password)
+
 class Item(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(length=30), nullable=False, unique=True)
@@ -29,9 +40,10 @@ class Item(db.Model):
 
 class VM(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    hostip = db.Column(db.String(length=15), nullable=False)
-    username = db.Column(db.String(length=12), nullable=False)
+    hostip = db.Column(db.String(length=15), nullable=False, index=True)
+    username = db.Column(db.String(length=12), nullable=False, index=True)
     password_hash = db.Column(db.String(length=60), nullable=False)
+    password_dec = ""
 
     @property
     def password(self):
@@ -39,4 +51,16 @@ class VM(db.Model):
 
     @password.setter
     def password(self, plain_text_password):
-        self.password_hash = bcrypt.generate_password_hash(plain_text_password).decode('utf-8')
+        self.password_hash = f.encrypt(str(plain_text_password).encode()).decode('utf-8') #encrypted password
+
+    def password_decryption(self, password_enc):
+        return f.decrypt(bytes(password_enc, 'UTF-8'))
+    
+    def to_dict(self):
+        print(self.id)
+        return {
+            'id': self.id,
+            'hostip': self.hostip,
+            'username': self.username,
+            'password_hash': self.password_hash,
+        }
