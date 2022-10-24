@@ -1,3 +1,22 @@
-__pycache__/*
-passwordManager/__pycache__/*
+__pycache__/
+passwordManager/__pycache__/*.pyc
+passwordManager/__pycache__/__init__.cpython-39.pyc
+passwordManager/__pycache__/models.cpython-39.pyc
+passwordManager/__pycache__/routes.cpython-39.pyc
 
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+.vscode/settings.json
+
+# Flask stuff:
+instance/
+passwordManager/instance/
+.webassets-cache
