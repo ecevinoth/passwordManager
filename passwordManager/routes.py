@@ -3,7 +3,7 @@ import hashlib
 from flask import render_template, redirect, url_for, flash, request, session
 import requests
 from passwordManager import app
-from passwordManager.models import Item, User, VM
+from passwordManager.models import User, Asset
 from passwordManager.forms import VMForm # RegisterForm, LoginForm,
 from passwordManager import db
 from passwordManager import f
@@ -29,12 +29,6 @@ config = {
 @app.route('/home')
 def home_page():
     return render_template('home.html')
-
-@app.route('/market')
-@login_required
-def market_page():
-    items = Item.query.all()
-    return render_template('market.html', items=items)
 
 # soft delete to integrate with okta esso.
 @app.route('/register', methods=['GET', 'POST'])
@@ -162,27 +156,35 @@ def logout_page():
     flash("You have been logged out!", category='info')
     return redirect(url_for("home_page"))
 
-@app.route('/vm')
+@app.route('/asset')
 @login_required
-def vm_page():
-    vms = VM.query.limit(100).all()
-    for vm in vms:
-        vm.password_dec=vm.password_decryption(password_enc=vm.password_hash).decode("utf8")
-    return render_template('asset_manage.html', vms=vms)
+def asset_page():
+    assets = Asset.query.limit(100).all()
+    for asset in assets:
+        asset.password_dec=asset.password_decryption(password_enc=asset.password_hash).decode("utf8")
+    return render_template('asset_manage.html', assets=assets)
 
-@app.route('/vm_search')
+# @app.route('/asset_search')
+# @login_required
+# def asset_search():
+#     return render_template('asset_search.html')
+
+@app.route('/asset_search')
 @login_required
-def vm_search():
-    return render_template('asset_search.html')
+def asset_search():
+    assets = Asset.query.all()
+    for asset in assets:
+        asset.password_dec=asset.password_decryption(password_enc=asset.password_hash).decode("utf8")
+    return render_template('asset_search_basic_table.html' ,title='Basic Table' ,assets=assets)
 
 @app.route('/VMadd', methods=['GET', 'POST'])
 def vmadd_page():
     form = VMForm()
     if form.validate_on_submit():
-        vm_to_create = VM(hostip=form.hostip.data, username=form.username.data, password=form.password1.data)
+        vm_to_create = Asset(instance=form.instance.data, username=form.username.data, password=form.password1.data, other_details=form.otherdetails.data)
         db.session.add(vm_to_create)
         db.session.commit()
-        return redirect(url_for('vm_page'))
+        return redirect(url_for('asset_search'))
     if form.errors != {}: #If there are not errors from the validations
         for err_msg in form.errors.values():
             flash(f'There was an error with creating a user: {err_msg}', category='danger')
@@ -191,14 +193,14 @@ def vmadd_page():
 
 @app.route('/api/data')
 def data():
-    query = VM.query
+    query = Asset.query
 
     # search filter
     search = request.args.get('search[value]')
     if search:
         query = query.filter(db.or_(
-            VM.hostip.like(f'%{search}%'),
-            VM.username.like(f'%{search}%')
+            Asset.hostip.like(f'%{search}%'),
+            Asset.username.like(f'%{search}%')
         ))
     total_filtered = query.count()
 
@@ -213,7 +215,7 @@ def data():
         if col_name not in ['id', 'hostip', 'username']:
             col_name = 'id'
         descending = request.args.get(f'order[{i}][dir]') == 'desc'
-        col = getattr(VM, col_name)
+        col = getattr(Asset, col_name)
         if descending:
             col = col.desc()
         order.append(col)
@@ -230,6 +232,6 @@ def data():
     return {
         'data': [vm.to_dict() for vm in query],
         'recordsFiltered': total_filtered,
-        'recordsTotal': VM.query.count(),
+        'recordsTotal': Asset.query.count(),
         'draw': request.args.get('draw', type=int),
     }

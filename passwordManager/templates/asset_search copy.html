@@ -9,12 +9,13 @@
 </div>
 
 <table id="data" class="table table-hover table-dark table-striped">
+    <!-- <table id="dtOrderExample" class="table table-striped table-dark table-bordered table-sm"> -->
+
     <thead>
         <tr>
             <th>#</th>
-            <th><i class="fas fa-server mr-2 aria-hidden=true"></i>Instance</th>
+            <th><i class="fas fa-server mr-2 aria-hidden=true"></i>HostIP</th>
             <th><i class="fas fa-user-circle mr-2 aria-hidden=true"></i>UserName</th>
-            <th><i class="fas fa-user-circle mr-2 aria-hidden=true"></i>other_details</th>
         </tr>
     </thead>
     <tbody>
@@ -22,9 +23,8 @@
     <tfoot>
         <tr>
             <th>#</th>
-            <th><i class="fas fa-server mr-2 aria-hidden=true"></i>Instance</th>
+            <th><i class="fas fa-server mr-2 aria-hidden=true"></i>HostIP</th>
             <th><i class="fas fa-user-circle mr-2 aria-hidden=true"></i>UserName</th>
-            <th><i class="fas fa-user-circle mr-2 aria-hidden=true"></i>other_details</th>
         </tr>
     </tfoot>
 </table>
@@ -38,9 +38,8 @@
             serverSide: true,
             columns: [
                 { data: 'id' },
-                { data: 'instance' },
-                { data: 'username' },
-                { data: 'other_details' }
+                { data: 'hostip' },
+                { data: 'username' }
             ],
         });
     });

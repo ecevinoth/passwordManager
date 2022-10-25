@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-Virtual Machine
+Asset details
 {% endblock %}
 {% block content %}
 
@@ -21,17 +21,15 @@ Virtual Machine
     </thead>
     <tbody>
         <!-- Your rows inside the table HERE: -->
-        {% for vm in vms %}
+        {% for asset in assets %}
         {% include 'includes/items_modals.html' %}
         <tr>
-            <td>{{ vm.id }}</td>
-            <td>{{ vm.hostip }}</td>
-            <td>{{ vm.username }}</td>
+            <td>{{ asset.id }}</td>
+            <td>{{ asset.instance }}</td>
+            <td>{{ asset.username }}</td>
             <td>
-                <!-- <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ vm.id }}">More Info</button> -->
-                <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ vm.id }}">Copy Password</button>
-                <!-- <a class="btn btn-outline btn-info" href="{{ url_for('login_page') }}">Copy Password</a> -->
-                <button class="btn btn-outline btn-success" data-toggle="modal" data-target="#Modal-MoreInfo-{{ vm.id }}">Show Password</button>
+                <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ asset.id }}">Copy Password</button>
+                <button class="btn btn-outline btn-success" data-toggle="modal" data-target="#Modal-MoreInfo-{{ asset.id }}">Show Password</button>
             </td>
         </tr>
         {% endfor %}
@@ -46,22 +44,21 @@ Virtual Machine
         <h3>Database</h3>
         <tr>
             <th>#</th>
-            <th><i class="fas fa-server mr-2 aria-hidden=true"></i>HostIP</th>
+            <th><i class="fas fa-server mr-2 aria-hidden=true"></i>Instance</th>
             <th><i class="fas fa-user-circle mr-2 aria-hidden=true"></i>UserName</th>
         </tr>
     </thead>
     <tbody>
         <!-- Your rows inside the table HERE: -->
-        {% for vm in vms %}
+        {% for asset in assets %}
         {% include 'includes/items_modals.html' %}
         <tr>
-            <td>{{ vm.id }}</td>
-            <td>{{ vm.hostip }}</td>
-            <td>{{ vm.username }}</td>
+            <td>{{ asset.id }}</td>
+            <td>{{ asset.instance }}</td>
+            <td>{{ asset.username }}</td>
             <td>
-                <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ vm.id }}">Copy Password</button>
-                <!-- <a class="btn btn-outline btn-info" href="{{ url_for('login_page') }}">Copy Password</a> -->
-                <button class="btn btn-outline btn-success" data-toggle="modal" data-target="#Modal-MoreInfo-{{ vm.id }}">Show Password</button>
+                <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo-{{ asset.id }}">Copy Password</button>
+                <button class="btn btn-outline btn-success" data-toggle="modal" data-target="#Modal-MoreInfo-{{ asset.id }}">Show Password</button>
             </td>
         </tr>
         {% endfor %}

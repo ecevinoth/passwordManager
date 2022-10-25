@@ -56,20 +56,21 @@ class User(UserMixin):
     def create(user_id, name, email):
         USERS_DB[user_id] = User(user_id, name, email)
 
-class Item(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(length=30), nullable=False, unique=True)
-    price = db.Column(db.Integer(), nullable=False)
-    barcode = db.Column(db.String(length=12), nullable=False, unique=True)
-    description = db.Column(db.String(length=1024), nullable=False, unique=True)
-    owner = db.Column(db.Integer(), db.ForeignKey('user.id'))
-    def __repr__(self):
-        return f'Item {self.name}'
+# class Item(db.Model):
+#     id = db.Column(db.Integer(), primary_key=True)
+#     name = db.Column(db.String(length=30), nullable=False, unique=True)
+#     price = db.Column(db.Integer(), nullable=False)
+#     barcode = db.Column(db.String(length=12), nullable=False, unique=True)
+#     description = db.Column(db.String(length=1024), nullable=False, unique=True)
+#     owner = db.Column(db.Integer(), db.ForeignKey('user.id'))
+#     def __repr__(self):
+#         return f'Item {self.name}'
 
-class VM(db.Model):
+class Asset(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    hostip = db.Column(db.String(length=15), nullable=False, index=True)
+    instance = db.Column(db.String(length=255), nullable=False, index=True)
     username = db.Column(db.String(length=12), nullable=False, index=True)
+    other_details = db.Column(db.String(length=255), nullable=False, index=True)
     password_hash = db.Column(db.String(length=60), nullable=False)
     password_dec = ""
 
@@ -87,7 +88,9 @@ class VM(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'hostip': self.hostip,
+            'instance': self.instance,
             'username': self.username,
+            'other_details': self.other_details,
             'password_hash': self.password_hash,
+            # 'Name': "Vinoth"
         }

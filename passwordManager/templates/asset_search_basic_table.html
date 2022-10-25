@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="checkbox mb-3">
+  <br>
+  <a class="btn btn-sm btn-secondary" href="{{ url_for('vmadd_page') }}">Add VM</a>
+  <a class="btn btn-sm btn-secondary" href="{{ url_for('vmadd_page') }}">Add Database</a>
+</div>
+
+
+<div class="row" style="margin-top:10px; margin-left:10px">
+
+
+  <div class="table-responsive-sm col-6" style="margin-top:10px; margin-left:10px">
+    <h1>Login Details</h1>
+    <p>below is the list asset you have created.</p>
+    <table id="data" class="table table-hover table-dark table-striped table-sm">
+      <thead class="thead-dark">
+        <tr>
+          <th>#</th>
+          <th><i class="fas fa-server mr-2 aria-hidden=true"></i>Instance</th>
+          <th><i class="fas fa-user-circle mr-2 aria-hidden=true"></i>UserName</th>
+          <th><i class="fas fa-user-circle mr-2 aria-hidden=true"></i>other_details</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for asset in assets %}
+        <tr>
+          <td>{{ asset.id }}</td>
+          <td>{{ asset.instance }}</td>
+          <td>{{ asset.username }}</td>
+          <td>{{ asset.other_details }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="table-responsive-sm col-4" style="margin-top:10px; margin-left:10px">
+    <h1>Action</h1>
+    <p>show or copy asset password.</p>
+    <table id="data2" class="table table-hover table-dark table-striped table-sm">
+      <thead class="thead-dark">
+        <tr>
+          <th>#</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for asset in assets %}
+        {% include 'includes/modal_asset.html' %}
+        <tr>
+          <td>{{ asset.id }}</td>
+          <td>
+            <div class="btn-group btn-group-toggle">
+              <button class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#Modal-MoreInfo-{{ asset.id }}">Show</button>
+              <button class="btn btn-outline btn-info btn-sm" data-toggle="button" aria-pressed="false" autocomplete="off" onclick="clip_div('copyme')">Copy</button>
+              <div id="copyme" style="display: none;">{{ asset.password_dec }}</div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+</div>
+{% endblock %}
+
+
+
+
+{% block scripts %}
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
+<script>
+  function clip_text(a_string) {
+    var input = document.createElement('input')
+    input.id = "__copyText__";
+    input.value = a_string; // OOPS! document.getElementById(divId).innerText;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand("copy");
+    // var txt = input.value
+    input.remove()
+    // console.log("OK COPIED: '"+txt+"'")
+    console.log("OK COPIED")
+  };
+
+  function clip_div(divId) {
+    return clip_text(document.getElementById(divId).innerText)
+  };
+
+  $(document).ready(function () {
+
+    $('#data').DataTable({
+      columns: [
+        { searchable: false },
+        null,
+        null,
+        null
+      ],
+    });
+
+
+    $('#data2').DataTable({
+
+      columns: [
+        { searchable: true, orderable: true, order:'index', search:'applied', selected:true },
+        { searchable: false, orderable: false },
+      ],
+    });
+    var a_string = ""
+    clip_text(a_string);
+    clip_div(divId);
+  });
+</script>
+{% endblock %}
